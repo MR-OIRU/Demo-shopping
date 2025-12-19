@@ -3,6 +3,8 @@
     "cart": "Shopping Cart",
     "home": "Home",
     "products": "Products",
+    "subheading": " Discover our curated collection of premium products",
+    "about": "About",
     "checkout": "Checkout",
     "addToCart": "Add to Cart",
     "remove": "Remove",
@@ -20,14 +22,28 @@
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "system": "System"
+    "system": "System",
+    "shopNow": "Shop Now",
+    "featuredProducts": "Featured Products",
+    "viewAllProducts": "View All Products",
+    "contact": "Contact",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "followUs": "Follow Us",
+    "allRightsReserved": "All rights reserved",
+    "shop": "Shop",
+    "quickLinks": "Quick Links",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
   },
   "product": {
     "name": "Product Name",
     "description": "Description",
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
-    "addedToCart": "Added to cart"
+    "addedToCart": "Added to cart",
+    "viewDetail": "View Details"
   },
   "checkout": {
     "cart": "Cart Summary",
@@ -37,6 +53,7 @@
     "proceedToAddress": "Proceed to Address",
     "proceedToPayment": "Proceed to Payment",
     "placeOrder": "Place Order",
+    "back": "Back",
     "shipping": "Shipping",
     "grandTotal": "Grand Total",
     "shippingAddress": "Shipping Address",
@@ -54,6 +71,24 @@
     "orderSuccess": "Order Successful!",
     "orderNumber": "Order Number",
     "thankYou": "Thank you for your order",
-    "backToHome": "Back to Home"
+    "backToHome": "Back to Home",
+    "orderSummary": "Order Summary",
+    "paymentMethodTitle": "Select your preferred payment method",
+    "creditCardSubtitle": "Pay with credit or debit card",
+    "bankTransferSubtitle": "Transfer to our bank account",
+    "codSubtitle": "Pay when you receive"
+  },
+  "home": {
+    "heroTitle": "Discover premium products",
+    "heroSubtitle": "Curated collection of premium products just for you",
+    "aboutTitle": "About Us",
+    "aboutDescription": "We are an online store committed to bringing you the highest quality products. With our experience and expertise in product curation, we are ready to serve you with care and efficiency.",
+    "whyChooseUs": "Why Choose Us",
+    "qualityProducts": "Quality Products",
+    "qualityProductsDesc": "Only the finest products selected",
+    "fastDelivery": "Fast Delivery",
+    "fastDeliveryDesc": "Quick and secure delivery service",
+    "securePayment": "Secure Payment",
+    "securePaymentDesc": "Safe and reliable payment system"
   }
 }

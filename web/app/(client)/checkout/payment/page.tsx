@@ -62,25 +62,23 @@ export default function PaymentPage() {
     <div className="container py-8 max-w-6xl mx-auto">
       <CheckoutSteps currentStep="payment" />
 
-      <div className="grid lg:grid-cols-3 gap-8 mt-8">
-        {/* Payment Method Selection */}
-        <div className="lg:col-span-2 space-y-6">
-          <h1 className="text-3xl font-bold">{t("payment")}</h1>
+      <h1 className="text-xl sm:text-3xl font-bold m-3 text-center sm:text-left">{t("payment")}</h1>
 
+      <div className="flex flex-col lg:flex-row gap-6 m-3">
+        <div className="flex flex-col flex-2 gap-6">
           <Card>
             <CardHeader>
               <CardTitle>{t("paymentMethod")}</CardTitle>
               <CardDescription>
-                Select your preferred payment method
+                {t('paymentMethodTitle')}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <RadioGroup
                 value={paymentMethod}
                 onValueChange={setPaymentMethod}
-                className="space-y-4"
               >
-                <div className="flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-accent">
+                <div className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-accent">
                   <RadioGroupItem value="creditCard" id="creditCard" />
                   <Label
                     htmlFor="creditCard"
@@ -90,13 +88,13 @@ export default function PaymentPage() {
                     <div>
                       <p className="font-medium">{t("creditCard")}</p>
                       <p className="text-sm text-muted-foreground">
-                        Pay with credit or debit card
+                        {t('creditCardSubtitle')}
                       </p>
                     </div>
                   </Label>
                 </div>
 
-                <div className="flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-accent">
+                <div className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-accent">
                   <RadioGroupItem value="bankTransfer" id="bankTransfer" />
                   <Label
                     htmlFor="bankTransfer"
@@ -106,13 +104,13 @@ export default function PaymentPage() {
                     <div>
                       <p className="font-medium">{t("bankTransfer")}</p>
                       <p className="text-sm text-muted-foreground">
-                        Transfer to our bank account
+                        {t('bankTransferSubtitle')}
                       </p>
                     </div>
                   </Label>
                 </div>
 
-                <div className="flex items-center space-x-3 border rounded-lg p-4 cursor-pointer hover:bg-accent">
+                <div className="flex items-center gap-3 border rounded-lg p-4 cursor-pointer hover:bg-accent">
                   <RadioGroupItem value="cod" id="cod" />
                   <Label
                     htmlFor="cod"
@@ -122,7 +120,7 @@ export default function PaymentPage() {
                     <div>
                       <p className="font-medium">{t("cod")}</p>
                       <p className="text-sm text-muted-foreground">
-                        Pay when you receive
+                        {t('codSubtitle')}
                       </p>
                     </div>
                   </Label>
@@ -130,27 +128,34 @@ export default function PaymentPage() {
               </RadioGroup>
             </CardContent>
           </Card>
-
-          {/* Shipping Address */}
           <Card>
             <CardHeader>
               <CardTitle>{t("shippingAddress")}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2 text-sm">
-                <p className="font-medium">{shippingAddress.fullName}</p>
-                <p className="text-muted-foreground">
-                  {shippingAddress.phoneNumber}
-                </p>
-                <p className="text-muted-foreground">
-                  {shippingAddress.addressLine}
-                </p>
-                <p className="text-muted-foreground">
-                  {shippingAddress.city} {shippingAddress.postalCode}
-                </p>
-                <p className="text-muted-foreground">
-                  {shippingAddress.country}
-                </p>
+              <div className="flex flex-col gap-3 text-sm">
+                <div>
+                  {t("fullName")}
+                  <p className="text-muted-foreground ml-3"> {shippingAddress.fullName}</p>
+                </div>
+                <div>
+                  {t("phoneNumber")}
+                  <p className="text-muted-foreground ml-3">
+                    {shippingAddress.phoneNumber}
+                  </p>
+                </div>
+                <div>
+                  {t("addressLine")}
+                  <p className="text-muted-foreground ml-3">
+                    {shippingAddress.addressLine} {shippingAddress.city} {shippingAddress.postalCode}
+                  </p>
+                </div>
+                <div>
+                  {t("country")}
+                  <p className="text-muted-foreground ml-3">
+                    {shippingAddress.country}
+                  </p>
+                </div>
               </div>
               <Button
                 variant="link"
@@ -163,14 +168,13 @@ export default function PaymentPage() {
           </Card>
         </div>
 
-        {/* Order Summary */}
-        <div className="lg:col-span-1">
-          <Card className="sticky top-4">
+        <div className="flex flex-col flex-1">
+          <Card>
             <CardHeader>
               <CardTitle>{t('orderSummary')}</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
+            <CardContent className="flex flex-col gap-3">
+              <div>
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between text-sm">
                     <span className="text-muted-foreground">
@@ -185,7 +189,7 @@ export default function PaymentPage() {
 
               <Separator />
 
-              <div className="space-y-2">
+              <div>
                 <div className="flex justify-between text-sm">
                   <span className="text-muted-foreground">
                     {tCommon("subtotal")}
@@ -222,7 +226,7 @@ export default function PaymentPage() {
                 className="w-full"
                 onClick={() => router.push("/cart")}
               >
-                Back
+                {t('back')}
               </Button>
             </CardContent>
           </Card>

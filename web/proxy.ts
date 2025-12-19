@@ -1,20 +1,29 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export function proxy(request: NextRequest) {
-  const locale = request.cookies.get('locale')?.value ||
-                 request.headers.get('accept-language')?.split(',')[0].split('-')[0] ||
-                 'th';
+export async function proxy(req: NextRequest) {
+  const locale =
+    req.cookies.get("locale")?.value ||
+    req.headers.get("accept-language")?.split(",")?.[0]?.split("-")?.[0] ||
+    "th";
 
-  const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-locale', locale);
+  const headers = new Headers(req.headers);
+  headers.set("x-locale", locale);
 
-  return NextResponse.next({
-    request: {
-      headers: requestHeaders,
-    },
-  });
+  const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
+
+  if (!token) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
+    url.search = "";
+    const res = NextResponse.redirect(url);
+    
+    return res;
+  }
+
+  return NextResponse.next({ request: { headers } });
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ["/admin/:path*"],
 };

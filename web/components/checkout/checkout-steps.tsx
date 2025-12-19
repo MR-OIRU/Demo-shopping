@@ -22,7 +22,7 @@ export function CheckoutSteps({ currentStep }: CheckoutStepsProps) {
   const currentStepIndex = steps.findIndex((step) => step.id === currentStep);
 
   return (
-    <div className="w-full py-6">
+    <div className="w-full">
       <div className="max-w-2xl mx-auto px-4">
         <div className="flex items-center justify-between">
         {steps.map((step, index) => {
