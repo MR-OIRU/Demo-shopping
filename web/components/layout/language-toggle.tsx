@@ -17,7 +17,7 @@ export function LanguageToggle() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="cursor-pointer gap-2 border rounded-full">
-          <Globe className="h-5 w-5" />
+          <Globe className="h-5 w-5 hidden sm:block" />
           <span className="text-sm font-medium">{locale.toUpperCase()}</span>
         </Button>
       </DropdownMenuTrigger>

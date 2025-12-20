@@ -22,8 +22,8 @@ const EMPTY_ADDR: ShippingAddress = {
 
 export default function PaymentPage() {
   const router = useRouter();
-  const t = useTranslations("checkout");
-  const tCommon = useTranslations("common");
+  const t = useTranslations("client.checkout");
+  const tCommon = useTranslations("client.common");
   const { items, getTotalPrice, clearCart } = useCartStore();
 
   const [shippingAddress] = useState<ShippingAddress>(() => {

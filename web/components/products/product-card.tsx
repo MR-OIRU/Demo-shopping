@@ -24,8 +24,8 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { addItem, items } = useCartStore();
-  const t = useTranslations('common');
-  const tProduct = useTranslations('product');
+  const t = useTranslations('client.common');
+  const tProduct = useTranslations('client.product');
   const [isAdding, setIsAdding] = useState(false);
 
   const isInCart = items.some((item) => item.id === product.id);

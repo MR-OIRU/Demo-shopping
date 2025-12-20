@@ -17,7 +17,7 @@ import Link from "next/link";
 
 export function CartPopover() {
   const { items, removeItem, getTotalItems, getTotalPrice } = useCartStore();
-  const t = useTranslations('common');
+  const t = useTranslations('client.common');
   const totalItems = getTotalItems();
 
   return (

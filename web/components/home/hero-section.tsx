@@ -6,8 +6,8 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
-  const t = useTranslations("home");
-  const tCommon = useTranslations("common");
+  const t = useTranslations("client.home");
+  const tCommon = useTranslations("client.common");
 
   return (
     <section className="relative overflow-hidden py-20 sm:py-28 lg:py-32">

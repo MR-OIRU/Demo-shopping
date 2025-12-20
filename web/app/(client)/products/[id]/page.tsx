@@ -17,8 +17,8 @@ import { toast } from "sonner";
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const t = useTranslations("common");
-  const tProduct = useTranslations("product");
+  const t = useTranslations("client.common");
+  const tProduct = useTranslations("client.product");
   const { addItem } = useCartStore();
   const [quantity, setQuantity] = useState(1);
 

@@ -7,12 +7,16 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
-import { SystemUserType } from 'src/common/enums';
 import { UserSession } from './user-session.entity';
 
 export enum SystemUserStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+  ACTIVE = 'active',
+  INACTIVE = 'inactive',
+}
+
+export enum SystemUserRole {
+  SUPER_ADMIN = 'superadmin',
+  SUPPORT = 'support',
 }
 
 @Entity({ name: 'system_users' })
@@ -27,10 +31,14 @@ export class SystemUser {
   @Exclude()
   passwordHash: string;
 
-  @Column({ type: 'varchar', length: 32 })
-  type: SystemUserType;
+  @Column({ type: 'enum', enum: SystemUserRole })
+  role: SystemUserRole;
 
-  @Column({ type: 'varchar', length: 32, default: SystemUserStatus.ACTIVE })
+  @Column({
+    type: 'enum',
+    enum: SystemUserStatus,
+    default: SystemUserStatus.ACTIVE,
+  })
   status: SystemUserStatus;
 
   @Column({ nullable: true })
@@ -48,6 +56,6 @@ export class SystemUser {
   @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 
-  @OneToMany(() => UserSession, session => session.user)
+  @OneToMany(() => UserSession, (session) => session.user)
   sessions?: UserSession[];
 }

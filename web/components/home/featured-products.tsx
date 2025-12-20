@@ -12,7 +12,7 @@ interface FeaturedProductsProps {
 }
 
 export function FeaturedProducts({ products }: FeaturedProductsProps) {
-  const t = useTranslations("common");
+  const t = useTranslations("client.common");
 
   const featuredProducts = products.slice(0, 4);
 

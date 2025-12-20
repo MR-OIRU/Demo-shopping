@@ -11,7 +11,7 @@ interface CheckoutStepsProps {
 }
 
 export function CheckoutSteps({ currentStep }: CheckoutStepsProps) {
-  const t = useTranslations("checkout");
+  const t = useTranslations("client.checkout");
 
   const steps = [
     { id: "cart" as CheckoutStep, label: t("cart") },

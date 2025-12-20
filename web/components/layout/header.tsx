@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 
 export function Header() {
-  const t = useTranslations("common");
+  const t = useTranslations("client.common");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
