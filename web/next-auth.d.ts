@@ -3,7 +3,7 @@ import "next-auth/jwt";
 
 export type AppUser = {
   id: string;
-  name?: string | null;
+  username?: string | null;
   email?: string | null;
   role?: string | null;
 };

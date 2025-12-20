@@ -6,7 +6,7 @@ import { mockProducts } from "@/lib/data/products";
 import { getTranslations } from "next-intl/server";
 
 export default async function Home() {
-  const t = await getTranslations('common');
+  const t = await getTranslations('client.common');
 
   return (
     <div className="w-full">

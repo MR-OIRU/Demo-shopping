@@ -6,7 +6,7 @@ import { Store, Mail, Phone, MapPin, Facebook, Instagram, Twitter, LinkIcon, Con
 import { Separator } from "@/components/ui/separator";
 
 export function Footer() {
-  const t = useTranslations("common");
+  const t = useTranslations("client.common");
 
   const footerLinks = [
     { href: "/", label: t("home") },

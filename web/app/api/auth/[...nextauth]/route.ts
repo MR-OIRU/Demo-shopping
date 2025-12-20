@@ -10,7 +10,7 @@ type NestResponse = {
 
 type JwtPayload = {
   sub?: string;
-  name?: string;
+  username?: string;
   email?: string;
   role?: string;
   exp?: number;
@@ -40,12 +40,9 @@ function userFromAccessToken(accessToken: string): AppUser | null {
   const payload = decodeJwtPayload(accessToken);
   if (!payload) return null;
 
-  const idRaw = payload.sub;
-  if (idRaw === undefined || idRaw === null) return null;
-
   return {
-    id: String(idRaw),
-    name: payload.name ?? null,
+    id: payload.sub ?? "",
+    username: payload.username ?? null,
     email: payload.email ?? null,
     role: payload.role ?? null,
   };
@@ -57,7 +54,7 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
       return { ...token, error: "RefreshAccessTokenError" };
     }
 
-    const res = await fetch(`${process.env.NEST_API_URL}/auth/refresh`, {
+    const res = await fetch(`${process.env.NEST_API_URL}/api/auth/refresh`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: token.refreshToken }),
@@ -99,26 +96,20 @@ export const authOptions: NextAuthOptions = {
           throw new Error("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
         }
 
-        const res = await fetch(`${process.env.NEST_API_URL}/auth/login`, {
+        const res = await fetch(`${process.env.NEST_API_URL}/api/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ username, password }),
         });
 
-        let message = "เข้าสู่ระบบไม่สำเร็จ";
-
-        const body = await res.json();
-
-        if (typeof body?.message === "string") {
-          message = body.message;
-        }
-
         if (!res.ok) {
-          throw new Error(message);
+          throw new Error("เข้าสู่ระบบไม่สำเร็จ");
         }
 
-        const accessToken = body.access_token;
-        const refreshToken = body.refresh_token;
+        const result = await res.json();
+
+        const accessToken = result.data.accessToken;
+        const refreshToken = result.data.refreshToken;
 
         if (!accessToken || !refreshToken) {
           throw new Error("ไม่พบ token จากระบบ");
@@ -131,7 +122,7 @@ export const authOptions: NextAuthOptions = {
 
         return {
           id: derivedUser.id,
-          name: derivedUser.name ?? username,
+          username: derivedUser.username ?? username,
           email: derivedUser.email,
           role: derivedUser.role,
           accessToken,
@@ -143,9 +134,10 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+
         const u = user as unknown as {
           id: string;
-          name?: string | null;
+          username?: string | null;
           email?: string | null;
           role?: string | null;
           accessToken: string;
@@ -157,7 +149,7 @@ export const authOptions: NextAuthOptions = {
 
         token.user = derivedUser ?? {
           id: u.id,
-          name: u.name ?? null,
+          username: u.username ?? null,
           email: u.email ?? null,
           role: u.role ?? null,
         };
@@ -184,7 +176,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       session.user = token.user ?? {
         id: "unknown",
-        name: null,
+        username: null,
         email: null,
         role: null,
       };

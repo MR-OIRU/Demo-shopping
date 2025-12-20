@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 
@@ -16,7 +15,7 @@ import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const t = useTranslations('common');
+  const t = useTranslations('client.common');
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,7 +37,7 @@ export function ThemeToggle() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="cursor-pointer gap-2 border rounded-full">
            {theme === "light" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-          <span className="text-sm font-medium">{getThemeLabel()}</span>
+          <span className="text-sm font-medium hidden sm:block">{getThemeLabel()}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

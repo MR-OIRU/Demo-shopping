@@ -2,9 +2,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SystemUserType } from 'src/common/enums';
 import {
   SystemUser,
+  SystemUserRole,
   SystemUserStatus,
   UserSession,
 } from 'src/database/entities';
@@ -13,12 +13,13 @@ import { LoginDto } from './dto';
 import { AuthJwtPayload } from 'src/common/interfaces';
 import { randomBytes, randomUUID } from 'crypto';
 import * as bcrypt from 'bcrypt';
-import * as ms from 'ms';
+import ms from 'ms';
 
 export interface CurrentUser {
   id: string;
   username: string;
-  type: SystemUserType;
+  role: SystemUserRole;
+  email: string;
 }
 
 interface SessionMeta {
@@ -46,7 +47,8 @@ export class AuthService {
     const currentUser: CurrentUser = {
       id: user.id,
       username: user.username,
-      type: user.type,
+      role: user.role,
+      email: user.email || '',
     };
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -95,7 +97,8 @@ export class AuthService {
     const currentUser: CurrentUser = {
       id: user.id,
       username: user.username,
-      type: user.type,
+      role: user.role,
+      email: user.email || '',
     };
 
     const [newAccessToken, newRefreshToken] = await Promise.all([
@@ -123,7 +126,8 @@ export class AuthService {
     const payload: AuthJwtPayload = {
       sub: user.id,
       username: user.username,
-      type: user.type,
+      role: user.role,
+      email: user.email,
     };
 
     return this.jwtService.signAsync(payload);
@@ -201,17 +205,12 @@ export class AuthService {
   }
 
   private durationToMs(duration: string): number {
-    const msFunc = ms as (val: string) => number | undefined;
-    const value = msFunc(duration);
-
-    if (typeof value === 'number') {
-      return value;
-    }
+    const value = ms(duration);
+    if (typeof value === 'number') return value;
 
     const numeric = Number(duration);
-    if (Number.isFinite(numeric)) {
-      return numeric;
-    }
+    if (Number.isFinite(numeric)) return numeric;
+
     throw new Error(`Unable to parse duration: ${duration}`);
   }
 

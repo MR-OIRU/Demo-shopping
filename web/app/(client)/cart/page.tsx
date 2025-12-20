@@ -33,8 +33,8 @@ import { ShippingSchema } from "@/schema/shopping.schema";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, getTotalPrice, clearCart } = useCartStore();
-  const t = useTranslations('common');
-  const tCheckout = useTranslations('checkout');
+  const t = useTranslations('client.common');
+  const tCheckout = useTranslations('client.checkout');
   const router = useRouter();
 
   const form = useForm<ShippingSchema>({

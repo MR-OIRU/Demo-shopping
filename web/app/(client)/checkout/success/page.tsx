@@ -15,8 +15,8 @@ import { Order } from "@/types";
 
 export default function SuccessPage() {
   const router = useRouter();
-  const t = useTranslations("checkout");
-  const tCommon = useTranslations("common");
+  const t = useTranslations("client.checkout");
+  const tCommon = useTranslations("client.common");
 
   // ✅ อ่าน localStorage ตอน mount (เฉพาะ client)
   const [order] = useState<Order | null>(() => {

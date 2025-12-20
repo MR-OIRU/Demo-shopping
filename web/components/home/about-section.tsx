@@ -5,7 +5,7 @@ import { ShieldCheck, Truck, Award } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 export function AboutSection() {
-  const t = useTranslations("home");
+  const t = useTranslations("client.home");
 
   const features = [
     {

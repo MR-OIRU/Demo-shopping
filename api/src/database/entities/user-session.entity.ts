@@ -28,9 +28,6 @@ export class UserSession {
   @Column({ name: 'expires_at', type: 'timestamptz' })
   expiresAt: Date;
 
-  @Column({ name: 'user_agent', nullable: true })
-  userAgent?: string;
-
   @Column({ name: 'ip_address', nullable: true })
   ipAddress?: string;
 
