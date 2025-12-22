@@ -4,12 +4,13 @@ import { JwtAuthGuard } from './common/guards';
 import { ConfigModule } from '@nestjs/config';
 import { DatabaseModule } from './database';
 import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }), 
     DatabaseModule, 
-    AuthModule
+    AuthModule, UserModule
   ],
   providers: [
     {

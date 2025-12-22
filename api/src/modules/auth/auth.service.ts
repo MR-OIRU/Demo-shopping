@@ -66,7 +66,7 @@ export class AuthService {
 
   async refresh(refreshToken: string, ipAddress: string) {
     const { sessionId, tokenSecret } = this.parseRefreshToken(refreshToken);
-
+    console.log('Parsed refresh token:', { sessionId, tokenSecret });
     const session = await this.userSessionRepository.findOne({
       where: { id: sessionId },
       relations: ['user'],

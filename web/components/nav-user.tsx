@@ -3,13 +3,14 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from '@/components/ui/sidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { AppUser } from '@/next-auth';
 import { ChevronsUpDown } from 'lucide-react';
 import { UserInfo } from './user-info';
 import { UserMenuContent } from './user-menu-content';
 import { useEffect, useState } from 'react';
+import { useUserDetail } from '@/hooks/use-user';
 
-export function NavUser({ user }: { user: AppUser | null }) {
+export function NavUser() {
+    const { data: user } = useUserDetail();
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 

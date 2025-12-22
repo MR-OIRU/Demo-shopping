@@ -1,7 +1,15 @@
 "use client";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SessionProvider } from "next-auth/react";
+import { useState } from "react";
 
-export default function AdminProviders({ children }: { children: React.ReactNode }) {
-  return <SessionProvider>{children}</SessionProvider>;
+export default function MainProviders({ children }: { children: React.ReactNode }) {
+  const [queryClient] = useState(() => new QueryClient());
+  return (
+    <SessionProvider refetchInterval={60} refetchOnWindowFocus>
+      <QueryClientProvider client={queryClient}>
+        {children}
+      </QueryClientProvider>
+    </SessionProvider>
+  )
 }

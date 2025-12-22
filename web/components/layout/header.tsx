@@ -1,18 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { Store, Menu, X } from "lucide-react";
+import { Store } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { LanguageToggle } from "./language-toggle";
 import { CartPopover } from "@/components/cart/cart-popover";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { MobileNav } from "../nav-mobile";
 
 export function Header() {
   const t = useTranslations("client.common");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
   const navLinks = [
@@ -56,38 +54,13 @@ export function Header() {
             <LanguageToggle />
             <ThemeToggle />
             <CartPopover />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
+            <MobileNav
+              links={navLinks}
+              isActive={isActive}
+              title={t("menu")}
+            />
           </div>
         </div>
-
-        {mobileMenuOpen && (
-          <nav className="md:hidden border-t py-4 space-y-3">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-2 text-sm font-medium rounded-md transition-colors ${isActive(link.href)
-                  ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                  }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-        )}
       </div>
     </header>
   );

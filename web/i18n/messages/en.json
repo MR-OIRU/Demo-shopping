@@ -36,7 +36,8 @@
       "shop": "Shop",
       "quickLinks": "Quick Links",
       "privacyPolicy": "Privacy Policy",
-      "termsOfService": "Terms of Service"
+      "termsOfService": "Terms of Service",
+      "menu": "Menu"
     },
     "product": {
       "name": "Product Name",
@@ -96,12 +97,20 @@
   "admin": {
     "mainMenu": "Main Menu",
     "dashboard": "Dashboard",
+    "member": "Member",
     "product": "Product",
     "order": "Order",
-    "setting": "Setting",
+    "settingMenu": "Setting",
     "logout": "Log out",
     "loggingOut": "Logging out...",
     "settingPassword": "Setting Password",
-    "settingProfile": "Setting Profile"
+    "settingProfile": "Setting Profile",
+    "setting": {
+      "loading": "Please wait, loading data",
+      "username": "Username",
+      "email": "Email",
+      "phone": "Phone Number",
+      "password": "Password"
+    }
   }
 }

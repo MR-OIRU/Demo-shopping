@@ -30,7 +30,7 @@ export function UserMenuContent() {
                 <DropdownMenuItem asChild>
                     <Link className="block w-full cursor-pointer" href={'/admin/setting/profile'} prefetch>
                         <Settings className="hover:text-white" />
-                        {t('setting')}
+                        {t('settingMenu')}
                     </Link>
                 </DropdownMenuItem>
             </DropdownMenuGroup>

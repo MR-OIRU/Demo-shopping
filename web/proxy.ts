@@ -10,7 +10,7 @@ export async function proxy(req: NextRequest) {
   const headers = new Headers(req.headers);
   headers.set("x-locale", locale);
 
-  const token = await getToken({ req, secret: process.env.NEXT_AUTH_SECRET });
+  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
 
   if (!token) {
     const url = req.nextUrl.clone();

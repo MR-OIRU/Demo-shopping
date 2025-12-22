@@ -16,19 +16,13 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(
-    @Body() dto: LoginDto,
-    @Ip() ipAddress: string,
-  ) {
+  async login(@Body() dto: LoginDto, @Ip() ipAddress: string) {
     return this.authService.login(dto, ipAddress);
   }
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(
-    @Body() dto: RefreshTokenDto,
-    @Ip() ipAddress: string,
-  ) {
+  async refresh(@Body() dto: RefreshTokenDto, @Ip() ipAddress: string) {
     return this.authService.refresh(dto.refreshToken, ipAddress);
   }
 

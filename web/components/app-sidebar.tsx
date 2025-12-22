@@ -1,4 +1,4 @@
-import { LayoutDashboard, ShoppingCart, Package } from "lucide-react"
+import { LayoutDashboard, ShoppingCart, Package, Users } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -13,13 +13,9 @@ import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 import { NavItem } from "@/types";
 import Link from "next/link";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getTranslations } from "next-intl/server";
 
 export async function AppSidebar() {
-  const session = await getServerSession(authOptions);
-  const user = session?.user ?? null;
   const t = await getTranslations('admin');
 
   const mainNavItems: NavItem[] = [
@@ -27,6 +23,11 @@ export async function AppSidebar() {
       title: t("dashboard"),
       href: "/admin",
       icon: LayoutDashboard,
+    },
+    {
+      title: t("member"),
+      href: "/admin/member",
+      icon: Users,
     },
     {
       title: t("product"),
@@ -59,7 +60,7 @@ export async function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t">
-        <NavUser user={user} />
+        <NavUser />
       </SidebarFooter>
     </Sidebar>
   )

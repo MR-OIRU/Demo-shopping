@@ -6,6 +6,7 @@ export type AppUser = {
   username?: string | null;
   email?: string | null;
   role?: string | null;
+  profileUrl?: string | null;
 };
 
 declare module "next-auth" {
