@@ -96,14 +96,22 @@ export const authOptions: NextAuthOptions = {
           throw new Error("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
         }
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/auth/login`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ username, password }),
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API}/api/auth/login`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+          }
+        );
 
         if (!res.ok) {
-          throw new Error("เข้าสู่ระบบไม่สำเร็จ");
+          let msg = "เข้าสู่ระบบไม่สำเร็จ";
+          try {
+            const err = await res.json();
+            msg = err?.message ?? msg;
+          } catch {}
+          throw new Error(msg);
         }
 
         const result = await res.json();
@@ -134,7 +142,6 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-
         const u = user as unknown as {
           id: string;
           username?: string | null;

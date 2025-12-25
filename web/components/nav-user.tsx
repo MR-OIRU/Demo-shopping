@@ -7,10 +7,12 @@ import { ChevronsUpDown } from 'lucide-react';
 import { UserInfo } from './user-info';
 import { UserMenuContent } from './user-menu-content';
 import { useEffect, useState } from 'react';
-import { useUserDetail } from '@/hooks/use-user';
+import { useMeDetail } from '@/hooks/use-member';
+import SettingProfileDialog from './admin/member/dialog/profile/settingProfileDialog';
 
 export function NavUser() {
-    const { data: user } = useUserDetail();
+    const { data: user } = useMeDetail();
+    const [openDialog, setOpenDialog] = useState(false);
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
 
@@ -35,10 +37,13 @@ export function NavUser() {
                         align="end"
                         side={isMobile ? 'bottom' : state === 'collapsed' ? 'left' : 'bottom'}
                     >
-                        <UserMenuContent />
+                        <UserMenuContent openDialog={() => setOpenDialog(true)} />
                     </DropdownMenuContent>
                 </DropdownMenu>
+
+                <SettingProfileDialog open={openDialog} onOpenChange={setOpenDialog} />
             </SidebarMenuItem>
         </SidebarMenu>
+
     );
 }

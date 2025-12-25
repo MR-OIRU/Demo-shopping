@@ -2,14 +2,14 @@ import { DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator } from '@/co
 import { LogOut, Settings } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export function UserMenuContent() {
+export function UserMenuContent({ openDialog }: { openDialog: () => void }) {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const t = useTranslations('admin');
+
     const handleLogout = async () => {
         if (loading) return;
 
@@ -27,11 +27,14 @@ export function UserMenuContent() {
         <>
 
             <DropdownMenuGroup>
-                <DropdownMenuItem asChild>
-                    <Link className="block w-full cursor-pointer" href={'/admin/setting/profile'} prefetch>
-                        <Settings className="hover:text-white" />
-                        {t('settingMenu')}
-                    </Link>
+                <DropdownMenuItem
+                    className='cursor-pointer'
+                    onSelect={(e) => {
+                        e.preventDefault();
+                        openDialog();
+                    }}>
+                    <Settings className="hover:text-white" />
+                    {t('settingProfile')}
                 </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -56,6 +56,10 @@ export class AuthService {
       this.issueRefreshToken(user.id, { ip: ipAddress }),
     ]);
 
+    await this.userRepository.update(user.id, {
+      lastLoginAt: new Date(),
+    });
+
     return {
       accessToken,
       refreshToken,
@@ -66,7 +70,7 @@ export class AuthService {
 
   async refresh(refreshToken: string, ipAddress: string) {
     const { sessionId, tokenSecret } = this.parseRefreshToken(refreshToken);
-    console.log('Parsed refresh token:', { sessionId, tokenSecret });
+    // console.log('Parsed refresh token:', { sessionId, tokenSecret });
     const session = await this.userSessionRepository.findOne({
       where: { id: sessionId },
       relations: ['user'],
@@ -163,14 +167,12 @@ export class AuthService {
       where: { username },
     });
 
-    if (!user || user.status !== SystemUserStatus.ACTIVE) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    if (!user) throw new BadRequestException('Invalid username or password');
 
     const isValidPassword = await bcrypt.compare(password, user.passwordHash);
-    if (!isValidPassword) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
+    if (!isValidPassword) throw new BadRequestException('Invalid username or password');
+    
+    if (user.status !== SystemUserStatus.ACTIVE) throw new BadRequestException(`This account is inactive. \nPlease contact an administrator.`);
 
     return user;
   }

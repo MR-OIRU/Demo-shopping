@@ -100,17 +100,65 @@
     "member": "Member",
     "product": "Product",
     "order": "Order",
-    "settingMenu": "Setting",
     "logout": "Log out",
     "loggingOut": "Logging out...",
-    "settingPassword": "Setting Password",
     "settingProfile": "Setting Profile",
     "setting": {
       "loading": "Please wait, loading data",
       "username": "Username",
       "email": "Email",
       "phone": "Phone Number",
-      "password": "Password"
+      "password": "Password",
+      "placeholderPassword": "Set a new password (leave blank if you don't want to change)",
+      "confirmPassword": "Confirm Password",
+      "profile": "Your Profile",
+      "description": "Edit your personal information such as email, phone number, profile picture, and set a new password from this page",
+      "reset": "Reset",
+      "save": "Save",
+      "cancel": "Cancel"
+    },
+    "table": {
+      "search": "Search...",
+      "noResults": "No results to display",
+      "rowsPerPage": "Rows per page",
+      "of": "of",
+      "page": "Page",
+      "refetch": "Refetch Data",
+      "previous": "Previous",
+      "next": "Next",
+      "status": "Status",
+      "created": "Created At",
+      "updated": "Updated At",
+      "action": "Action",
+      "member": {
+        "role": "Role",
+        "image": "Image",
+        "username": "Username",
+        "email": "Email",
+        "phone": "Phone",
+        "lastLogin": "Last Login"
+      },
+      "product": {
+        "name": "Product Name",
+        "image": "Image",
+        "price": "Price",
+        "stock": "Stock"
+      },
+      "order": {
+        "orderId": "Order ID",
+        "customer": "Customer",
+        "total": "Total",
+        "status": "Order Status"
+      }
+    },
+    "memberPage": {
+      "breadcrumbs": "Member List"
+    },
+    "productPage": {
+      "breadcrumbs": "Product List"
+    },
+    "orderPage": {
+      "breadcrumbs": "Order List"
     }
   }
 }

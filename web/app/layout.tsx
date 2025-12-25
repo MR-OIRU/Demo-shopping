@@ -25,7 +25,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                     <LocaleProvider initialLocale={initialLocale}>
                         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
                             {children}
-                            <Toaster richColors duration={2000} />
+                            <Toaster
+                                richColors
+                                duration={2000}
+                                toastOptions={{
+                                    style: { whiteSpace: "pre-line" },
+                                }}
+                            />
                         </ThemeProvider>
                     </LocaleProvider>
                 </NextIntlClientProvider>
