@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { getRoleMeta } from '@/lib/role-mate';
 import { AppUser } from '@/next-auth';
 import { Badge } from './ui/badge';
@@ -17,9 +17,16 @@ export function UserInfo({ user, showEmail = false }: { user: AppUser; showEmail
     return (
         <>
             <Avatar className="h-8 w-8 overflow-hidden rounded-full">
-                <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
-                    {initials}
-                </AvatarFallback>
+                {user.profileUrl ?
+                    <AvatarImage
+                        src={user.profileUrl}
+                        alt={user?.username ?? "Username"}
+                        className="object-cover"
+                    /> :
+                    <AvatarFallback className="rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white">
+                        {initials}
+                    </AvatarFallback>
+                }
             </Avatar>
             <div className="grid flex-1 text-left text-sm leading-tight">
                 <div className="flex items-center gap-2 min-w-0">

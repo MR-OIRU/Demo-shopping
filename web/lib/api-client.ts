@@ -1,14 +1,11 @@
 "use client";
 
-import { useSessionStore } from "@/store/session-store";
+import { signOut } from "next-auth/react";
 
 type RequestOptions = {
   method?: string;
   body?: unknown;
   token?: string;
-  agentId?: string;
-  skipAuth?: boolean;
-  disableRefresh?: boolean;
 };
 
 // API Response wrapper type from backend (TransformInterceptor)
@@ -37,114 +34,82 @@ const isWrappedResponse = <T>(value: unknown): value is ApiResponse<T> =>
 const isMessagePayload = (value: unknown): value is { message?: string } =>
   typeof value === "object" && value !== null && "message" in value;
 
-type RefreshData = {
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
-  user: {
-    id: string;
-    username: string;
-    type: "SUPERADMIN" | "OWNER" | "EMPLOYEE";
-    agentRoles?: Record<string, "OWNER" | "EMPLOYEE">;
-  };
-};
-
-let refreshPromise: Promise<boolean> | null = null;
-
-const attemptTokenRefresh = async () => {
-  if (!refreshPromise) {
-    refreshPromise = (async () => {
-      const { tokens, setTokens, setSession, clearSession } = useSessionStore.getState();
-      const refreshToken = tokens?.refreshToken;
-      if (!refreshToken) {
-        clearSession();
-        return false;
-      }
-
-      try {
-        const response = await fetch("/api/auth/refresh", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ refreshToken }),
-        });
-
-        if (!response.ok) {
-          clearSession();
-          return false;
-        }
-
-        const json = (await response.json()) as ApiResponse<RefreshData>;
-        const { accessToken, refreshToken: newRefreshToken, user } = json.data;
-        setTokens({ accessToken, refreshToken: newRefreshToken });
-        setSession({ user });
-        return true;
-      } catch {
-        clearSession();
-        return false;
-      } finally {
-        refreshPromise = null;
-      }
-    })();
+export class ApiError extends Error {
+  status: number;
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
   }
+}
 
-  return refreshPromise;
+const attemptTokenRefresh = async (): Promise<string | null> => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API}/api/auth/refresh`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!res.ok) return null;
+
+  const json = (await res.json()) as ApiResponse<{
+    accessToken: string;
+  }>;
+
+  return json.data.accessToken;
 };
 
 async function request<T>(
   path: string,
   options: RequestOptions & { unwrapResponse?: boolean } = {},
-  retried = false,
+  _retried = false
 ): Promise<T> {
-  const session = useSessionStore.getState();
   const headers = new Headers();
 
   if (options.body && !(options.body instanceof FormData)) {
     headers.set("Content-Type", "application/json");
   }
 
-  const authToken =
-    options.skipAuth === true ? undefined : (options.token ?? session.tokens?.accessToken);
-
-  if (authToken) {
-    headers.set("Authorization", `Bearer ${authToken}`);
+  if (options.token) {
+    headers.set("Authorization", `Bearer ${options.token}`);
   }
 
-  if (options.agentId) {
-    headers.set("X-Agent-Id", options.agentId);
-  }
-
-  const response = await fetch("/api" + path, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API}/api` + path, {
     method: options.method ?? (options.body ? "POST" : "GET"),
     headers,
     body:
       options.body instanceof FormData
         ? options.body
         : options.body
-          ? JSON.stringify(options.body)
-          : undefined,
+        ? JSON.stringify(options.body)
+        : undefined,
     credentials: "include",
   });
 
-  if (response.status === 401 && !options.disableRefresh && !retried) {
-    const refreshed = await attemptTokenRefresh();
-    if (refreshed) {
-      return request<T>(
-        path,
-        {
-          ...options,
-          token: undefined,
-        },
-        true,
-      );
+  if (response.status === 401) {
+    if (_retried) {
+      await signOut({ callbackUrl: "/login" });
+      window.location.href = "/login";
+      throw new ApiError(401, "Unauthorized");
     }
+
+    const newToken = await attemptTokenRefresh();
+
+    if (!newToken) {
+      await signOut({ callbackUrl: "/login" });
+      window.location.href = "/login";
+      throw new ApiError(401, "Unauthorized");
+    }
+
+    return request<T>(path, { ...options, token: newToken }, true);
   }
 
   if (!response.ok) {
     let message = response.statusText;
     try {
       const errorBody = (await response.json()) as unknown;
-      if (isMessagePayload(errorBody) && typeof errorBody.message === "string") {
+      if (
+        isMessagePayload(errorBody) &&
+        typeof errorBody.message === "string"
+      ) {
         message = errorBody.message;
       }
     } catch {
@@ -171,24 +136,32 @@ async function request<T>(
 }
 
 export const apiClient = {
-  get: <T>(path: string, options?: Omit<RequestOptions & { unwrapResponse?: boolean }, "body">) =>
-    request<T>(path, { ...options, method: "GET" }),
+  get: <T>(
+    path: string,
+    options?: Omit<RequestOptions & { unwrapResponse?: boolean }, "body">
+  ) => request<T>(path, { ...options, method: "GET" }),
 
   post: <T>(
     path: string,
     body?: unknown,
-    options?: Omit<RequestOptions & { unwrapResponse?: boolean }, "body" | "method">,
+    options?: Omit<
+      RequestOptions & { unwrapResponse?: boolean },
+      "body" | "method"
+    >
   ) => request<T>(path, { ...options, method: "POST", body }),
 
   patch: <T>(
     path: string,
     body?: unknown,
-    options?: Omit<RequestOptions & { unwrapResponse?: boolean }, "body" | "method">,
+    options?: Omit<
+      RequestOptions & { unwrapResponse?: boolean },
+      "body" | "method"
+    >
   ) => request<T>(path, { ...options, method: "PATCH", body }),
 
   delete: <T>(
     path: string,
     body?: unknown,
-    options?: Omit<RequestOptions & { unwrapResponse?: boolean }, "body">,
+    options?: Omit<RequestOptions & { unwrapResponse?: boolean }, "body">
   ) => request<T>(path, { ...options, method: "DELETE", body }),
 };

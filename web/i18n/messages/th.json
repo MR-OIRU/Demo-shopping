@@ -36,7 +36,8 @@
       "shop": "ร้านค้า",
       "quickLinks": "ลิ้งด่วน",
       "privacyPolicy": "นโยบายความเป็นส่วนตัว",
-      "termsOfService": "เงื่อนไขการให้บริการ"
+      "termsOfService": "เงื่อนไขการให้บริการ",
+      "menu": "เมนู"
     },
     "product": {
       "name": "ชื่อสินค้า",
@@ -96,12 +97,68 @@
   "admin": {
     "mainMenu": "เมนูหลัก",
     "dashboard": "แดชบอร์ด",
+    "member": "สมาชิก",
     "product": "สินค้า",
     "order": "การสั่งซื้อ",
-    "setting": "ตั้งค่า",
     "logout": "ออกจากระบบ",
     "loggingOut": "กำลังออกจากระบบ...",
-    "settingPassword": "ตั้งค่ารหัสผ่าน",
-    "settingProfile": "ตั้งค่าโปรไฟล์"
+    "settingProfile": "ตั้งค่าโปรไฟล์",
+    "setting": {
+      "loading": "กรุณารอสักครู่ กำลังโหลดข้อมูล",
+      "username": "ชื่อผู้ใช้",
+      "email": "อีเมล",
+      "phone": "เบอร์โทรศัพท์",
+      "password": "รหัสผ่าน",
+      "placeholderPassword": "ตั้งรหัสผ่านใหม่ (เว้นว่างไว้หากไม่ต้องการเปลี่ยนแปลง)",
+      "confirmPassword": "ยืนยันรหัสผ่าน",
+      "profile": "โปรไฟล์ของคุณ",
+      "description": "แก้ไขข้อมูลส่วนตัวของคุณ เช่น อีเมล เบอร์โทรศัพท์ รูปโปรไฟล์ และตั้งรหัสผ่านใหม่ได้จากหน้านี้",
+      "reset": "คืนค่า",
+      "save": "บันทึก",
+      "cancel": "ยกเลิก"
+    },
+    "table": {
+      "search": "ค้นหา...",
+      "noResults": "ไม่มีข้อมูลที่จะแสดง",
+      "rowsPerPage": "แถวต่อหน้า",
+      "of": "จาก",
+      "page": "หน้า",
+      "refetch": "รีเฟรชข้อมูล",
+      "previous": "ก่อนหน้า",
+      "next": "ถัดไป",
+      "action": "จัดการ",
+      "status": "สถานะ",
+      "created": "สร้างเมื่อ",
+      "updated": "อัปเดตเมื่อ",
+      "member": {
+        "role": "บทบาท",
+        "image": "รูปภาพ",
+        "username": "ชื่อผู้ใช้",
+        "email": "อีเมล",
+        "phone": "เบอร์โทรศัพท์",
+        "lastLogin": "เข้าสู่ระบบล่าสุด"
+      },
+      "product": {
+        "name": "ชื่อสินค้า",
+        "image": "รูปภาพ",
+        "price": "ราคา",
+        "stock": "สต็อก"
+      },
+      "order": {
+        "orderId": "รหัสคำสั่งซื้อ",
+        "customer": "ลูกค้า",
+        "total": "ยอดรวม",
+        "status": "สถานะคำสั่งซื้อ"
+      }
+    },
+    "memberPage": {
+      "breadcrumbs": "รายชื่อสมาชิก"
+    },
+    "productPage": {
+      "breadcrumbs": "รายการสินค้า"
+    },
+    "orderPage": {
+      "breadcrumbs": "รายการสั่งซื้อ"
+    }
   }
 }

@@ -47,6 +47,9 @@ export class SystemUser {
   @Column({ nullable: true })
   phone?: string;
 
+  @Column({ name: 'profile_url', type: 'varchar', length: 255, nullable: true })
+  profileUrl?: string;
+
   @Column({ type: 'timestamptz', nullable: true, name: 'last_login_at' })
   lastLoginAt?: Date;
 
