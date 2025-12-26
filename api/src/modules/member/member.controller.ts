@@ -27,7 +27,7 @@ export class MemberController {
     return this.memberService.getMembers();
   }
 
-  @Get('me')
+  @Get('profile')
   async getMeDetail(@CurrentUser() user: AuthJwtPayload): Promise<MemberItem> {
     return this.memberService.getMemberDetail(user.sub);
   }
@@ -38,7 +38,7 @@ export class MemberController {
   }
 
   @Post('profile/updated')
-  @UseInterceptors(FileInterceptor('profile', { storage: memoryStorage() }))
+  @UseInterceptors(FileInterceptor('profile'))
   async updatedProfile(
     @UploadedFile() file: Express.Multer.File | undefined,
     @Body() data: UpdateProfile,
@@ -48,7 +48,7 @@ export class MemberController {
   }
 
   @Post('created-updated')
-  @UseInterceptors(FileInterceptor('profile', { storage: memoryStorage() }))
+  @UseInterceptors(FileInterceptor('profile'))
   async createdOrUpdatedMember(
     @UploadedFile() file: Express.Multer.File | undefined,
     @Body() data: CreatedOrUpdatedMember,
@@ -61,7 +61,7 @@ export class MemberController {
     return this.memberService.updatedStatus(data);
   }
 
-  @Delete('delete')
+  @Delete('deleted')
   async deleteMember(@Body('id') id: string): Promise<void> {
     return this.memberService.deleteMember(id);
   }

@@ -135,6 +135,11 @@ export class MemberService {
       if (!exists) throw new BadRequestException('User not found');
     }
 
+    if (!isUpdate) {
+      if (!data.password)
+        throw new BadRequestException('Please enter your password');
+    }
+
     if (data.password && data.password !== data.confirmPassword) {
       throw new BadRequestException(
         'Password and confirm password do not match',
@@ -159,6 +164,7 @@ export class MemberService {
     if (phoneDup) throw new BadRequestException('Phone already exists');
 
     const payload: Partial<SystemUser> = {
+      role: data.role,
       email: data.email,
       username: data.username,
       phone: data.phone,
@@ -218,7 +224,7 @@ export class MemberService {
     if (!exists) throw new BadRequestException('User not found');
 
     if (exists.role === SystemUserRole.SUPER_ADMIN) {
-      throw new BadRequestException('Cannot delete super admin');
+      throw new BadRequestException('Cannot Delete Role Super Admin!!');
     }
 
     await this.userRepository.delete({ id });

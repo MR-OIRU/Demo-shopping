@@ -7,8 +7,8 @@ const ROLE_META = {
     label: "Admin",
     badgeVariant: "default",
   },
-  staff: {
-    label: "Staff",
+  support: {
+    label: "Suport",
     badgeVariant: "secondary",
   },
 } as const;

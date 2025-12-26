@@ -1,12 +1,11 @@
 "use client";
 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { useMemberUpdated, useMeDetail } from "@/hooks/use-member";
+import { useMemberCreatedOrUpdated, useMemberById } from "@/hooks/use-member";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form"
-import z from "zod";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { Mail, User, UploadIcon, Phone, LockKeyhole, Eye, EyeOff, Loader2, Save, RotateCcw } from "lucide-react";
 import {
@@ -26,58 +25,29 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-
-const ProfileFormSchema = z.object({
-    id: z.string(),
-    email: z
-        .string()
-        .min(1, "กรุณากรอกอีเมล")
-        .email("รูปแบบอีเมลไม่ถูกต้อง"),
-    password: z
-        .string()
-        .optional()
-        .or(z.literal(""))
-        .refine((val) => !val || val.length >= 8, "รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร")
-        .refine((val) => !val || /[A-Z]/.test(val), "รหัสผ่านต้องมีตัวอักษรพิมพ์ใหญ่อย่างน้อย 1 ตัว")
-        .refine((val) => !val || /[a-z]/.test(val), "รหัสผ่านต้องมีตัวอักษรพิมพ์เล็กอย่างน้อย 1 ตัว")
-        .refine((val) => !val || /[0-9]/.test(val), "รหัสผ่านต้องมีตัวเลขอย่างน้อย 1 ตัว"),
-    confirmPassword: z.string().optional().or(z.literal("")),
-    phone: z
-        .string()
-        .min(10, "กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก")
-        .max(10, "กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก")
-        .regex(/^0[0-9]{9}$/, "รูปแบบเบอร์โทรศัพท์ไม่ถูกต้อง"),
-    profile: z.instanceof(File).optional().nullable(),
-}).superRefine(({ password, confirmPassword }, ctx) => {
-    if (password && password.length > 0) {
-        if (confirmPassword !== password) {
-            ctx.addIssue({
-                code: z.ZodIssueCode.custom,
-                path: ["confirmPassword"],
-                message: "รหัสผ่านไม่ตรงกัน",
-            });
-        }
-    }
-});
-export type ProfileFormSchema = z.infer<typeof ProfileFormSchema>;
+import { MemberFormSchema } from "@/schema/member.schema";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export interface DialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
+    id?: string;
 }
 
-export default function MemberDialog({ open, onOpenChange }: DialogProps) {
-    const { data: user, isPending, refetch } = useMeDetail();
-    const { mutateAsync: updatedUser, isPending: isUpdating } = useMemberUpdated();
+export default function MemberDialog({ open, onOpenChange, id }: DialogProps) {
+    const { mutateAsync: action, isPending } = useMemberCreatedOrUpdated();
     const t = useTranslations('admin.setting');
-
+    const tMember = useTranslations('admin.setting.member');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
+    const { data, refetch } = useMemberById(id);
 
-    const form = useForm<ProfileFormSchema>({
-        resolver: zodResolver(ProfileFormSchema),
+    const form = useForm<MemberFormSchema>({
+        resolver: zodResolver(MemberFormSchema),
         defaultValues: {
             id: "",
+            role: "",
+            username: "",
             email: "",
             password: "",
             confirmPassword: "",
@@ -96,32 +66,28 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
 
     useEffect(() => {
         if (!open) return;
-        if (!user) return;
-        form.setValue("id", user.id ?? "");
-        form.setValue("email", user.email ?? "");
-        form.setValue("phone", user.phone ?? "");
-        setImagePreview(user.profileUrl ?? null);
-    }, [open, user, form]);
+        if (!id) return;
+        if (!data) return;
+        form.setValue("id", id ?? "");
+        form.setValue("role", data.role ?? "");
+        form.setValue("username", data.username ?? "");
+        form.setValue("email", data.email ?? "");
+        form.setValue("phone", data.phone ?? "");
+        setImagePreview(data.profileUrl ?? null);
+    }, [open, id, data, form]);
 
     const onReset = () => {
-        if (!user) return;
-        form.setValue("id", user.id ?? "");
-        form.setValue("email", user.email ?? "");
-        form.setValue("phone", user.phone ?? "");
-        form.setValue("password", "");
-        form.setValue("confirmPassword", "");
-        form.setValue("profile", null);
-        setImagePreview(user.profileUrl ?? null);
+        form.reset();
         form.clearErrors();
     }
 
-    const onSubmit = async (values: ProfileFormSchema) => {
+    const onSubmit = async (values: MemberFormSchema) => {
         try {
             const payload = {
                 ...values,
                 password: values.password?.trim() ? values.password : undefined,
             };
-            await updatedUser(payload);
+            await action(payload);
             onReset();
             onOpenChange(false);
         } catch {
@@ -129,35 +95,23 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
         }
     };
 
-    if (isPending) {
-        return (
-            <div className="grid h-full items-center justify-center">
-                <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
-                    <span className="text-sm text-muted-foreground">{t('loading')}</span>
-                </div>
-            </div>
-        );
-    }
-
     const initials =
-        (user?.username ?? "U")
+        (data?.username ?? "U")
             .split(" ")
             .filter(Boolean)
             .slice(0, 2)
             .map((s) => s[0]?.toUpperCase())
             .join("") || "U";
 
-
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-h-[95vh] overflow-x-auto sm:max-w-4xl">
+            <DialogContent className="max-h-[95vh] overflow-x-auto sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-xl">
-                        {t('profile')}
+                        {id ? tMember('headUpdated') : tMember('headCreated')}
                     </DialogTitle>
                     <DialogDescription>
-                        {t('description')}
+                        {id ? tMember('descriptionUpdated') : tMember('descriptionCreated')}
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -168,7 +122,7 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                     {imagePreview ? (
                                         <AvatarImage
                                             src={imagePreview}
-                                            alt={user?.username ?? "Username"}
+                                            alt={data?.username ?? "Username"}
                                             className="object-cover"
                                         />
                                     ) : (
@@ -206,25 +160,63 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                 />
                             </Label>
                         </div>
-                        <div className="grid grid-cols- gap-3">
-                            <Label>{t('username')}</Label>
-                            <InputGroup>
-                                <InputGroupInput
-                                    type="text"
-                                    readOnly
-                                    tabIndex={-1}
-                                    className="cursor-default focus:outline-none focus:ring-0"
-                                    defaultValue={user?.username || "user"}
-                                />
-                                <InputGroupAddon align="inline-start"><User /></InputGroupAddon>
-                            </InputGroup>
+                        <div className="grid grid-cols-1 gap-3">
+
+                            <FormField
+                                name="role"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{tMember('role')}</FormLabel>
+                                        <Select onValueChange={field.onChange} value={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger className="w-full">
+                                                    <SelectValue placeholder={tMember('selectRole')} />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                <SelectItem value="superadmin">Super Admin</SelectItem>
+                                                <SelectItem value="support">Support</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                name="username"
+                                control={form.control}
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{tMember('username')}</FormLabel>
+                                        <FormControl>
+                                            <InputGroup>
+                                                <InputGroupInput
+                                                    type="text"
+                                                    {...field}
+                                                    readOnly={!!id}
+                                                    tabIndex={id ? -1 : undefined}
+                                                    className={
+                                                        id
+                                                            ? "cursor-default focus:outline-none focus:ring-0"
+                                                            : undefined
+                                                    }
+                                                />
+                                                <InputGroupAddon align="inline-start"><User /></InputGroupAddon>
+                                            </InputGroup>
+                                        </FormControl>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
 
                             <FormField
                                 name="email"
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('email')}</FormLabel>
+                                        <FormLabel>{tMember('email')}</FormLabel>
                                         <FormControl>
                                             <InputGroup>
                                                 <InputGroupInput
@@ -234,6 +226,7 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                                 <InputGroupAddon align="inline-start"><Mail /></InputGroupAddon>
                                             </InputGroup>
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -243,7 +236,7 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('phone')}</FormLabel>
+                                        <FormLabel>{tMember('phone')}</FormLabel>
                                         <FormControl>
                                             <InputGroup>
                                                 <InputGroupInput
@@ -254,6 +247,7 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                                 <InputGroupAddon align="inline-start"><Phone /></InputGroupAddon>
                                             </InputGroup>
                                         </FormControl>
+                                        <FormMessage />
                                     </FormItem>
                                 )}
                             />
@@ -263,12 +257,12 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t("password")}</FormLabel>
+                                        <FormLabel>{tMember("password")}</FormLabel>
                                         <FormControl>
                                             <InputGroup>
                                                 <InputGroupInput
                                                     type={showPassword ? "text" : "password"}
-                                                    placeholder={t('placeholderPassword')}
+                                                    placeholder={id ? tMember('placeholderChangePassword') : tMember('placeholderPassword')}
                                                     {...field}
                                                 />
 
@@ -297,7 +291,7 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                     control={form.control}
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>{t('confirmPassword')}</FormLabel>
+                                            <FormLabel>{tMember('confirmPassword')}</FormLabel>
                                             <FormControl>
                                                 <InputGroup>
                                                     <InputGroupInput
@@ -309,6 +303,7 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                                     <InputGroupAddon align="inline-end">
                                                         <InputGroupButton
                                                             variant="secondary"
+                                                            onClick={() => setShowPassword((v) => !v)}
                                                             aria-label={showPassword ? "Hide password" : "Show password"}>
                                                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                                                         </InputGroupButton>
@@ -326,8 +321,8 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                             ) : null}
 
                             <DialogFooter className="!justify-between !flex-col sm:!flex-row">
-                                <Button type="button" className="cursor-pointer" variant={'secondary'} disabled={isUpdating} onClick={() => onReset()}>
-                                    {isUpdating ? (
+                                <Button type="button" className="cursor-pointer" variant={'secondary'} disabled={isPending} onClick={() => onReset()}>
+                                    {isPending ? (
                                         <Loader2 className="animeta-spin h-4 w-4" />
                                     ) : (
                                         <RotateCcw className="h-4 w-4" />
@@ -338,12 +333,12 @@ export default function MemberDialog({ open, onOpenChange }: DialogProps) {
                                 <div className="flex gap-2">
                                     <div className="flex-1">
                                         <DialogClose asChild>
-                                            <Button variant="destructive" className="w-full">{t('cancel')}</Button>
+                                            <Button variant="destructive" className="w-full" disabled={isPending} onClick={() => onReset()}>{t('cancel')}</Button>
                                         </DialogClose>
                                     </div>
                                     <div className="flex-2">
-                                        <Button type="submit" className="cursor-pointer w-full sm:w-[150px]" disabled={isUpdating}>
-                                            {isUpdating ? (
+                                        <Button type="submit" className="cursor-pointer w-full sm:w-[150px]" disabled={isPending}>
+                                            {isPending ? (
                                                 <Loader2 className="animeta-spin h-4 w-4" />
                                             ) : (
                                                 <Save className="h-4 w-4" />

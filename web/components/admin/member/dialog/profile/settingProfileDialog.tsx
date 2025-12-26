@@ -36,6 +36,7 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
     const { data: user, isPending, refetch } = useMeDetail();
     const { mutateAsync: updated, isPending: isUpdating } = useProfileUpdated();
     const t = useTranslations('admin.setting');
+    const tMember = useTranslations('admin.setting.member');
 
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
@@ -120,10 +121,10 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
             <DialogContent className="max-h-[95vh] overflow-x-auto sm:max-w-4xl">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-xl">
-                        {t('profile')}
+                        {tMember('headProfile')}
                     </DialogTitle>
                     <DialogDescription>
-                        {t('description')}
+                        {tMember('descriptionUpdated')}
                     </DialogDescription>
                 </DialogHeader>
                 <Form {...form}>
@@ -173,7 +174,7 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
                             </Label>
                         </div>
                         <div className="grid grid-cols- gap-3">
-                            <Label>{t('username')}</Label>
+                            <Label>{tMember('username')}</Label>
                             <InputGroup>
                                 <InputGroupInput
                                     type="text"
@@ -190,7 +191,7 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('email')}</FormLabel>
+                                        <FormLabel>{tMember('email')}</FormLabel>
                                         <FormControl>
                                             <InputGroup>
                                                 <InputGroupInput
@@ -209,7 +210,7 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t('phone')}</FormLabel>
+                                        <FormLabel>{tMember('phone')}</FormLabel>
                                         <FormControl>
                                             <InputGroup>
                                                 <InputGroupInput
@@ -229,12 +230,12 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
                                 control={form.control}
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>{t("password")}</FormLabel>
+                                        <FormLabel>{tMember("password")}</FormLabel>
                                         <FormControl>
                                             <InputGroup>
                                                 <InputGroupInput
                                                     type={showPassword ? "text" : "password"}
-                                                    placeholder={t('placeholderPassword')}
+                                                    placeholder={tMember('placeholderPassword')}
                                                     {...field}
                                                 />
 
@@ -263,7 +264,7 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
                                     control={form.control}
                                     render={({ field }) => (
                                         <FormItem>
-                                            <FormLabel>{t('confirmPassword')}</FormLabel>
+                                            <FormLabel>{tMember('confirmPassword')}</FormLabel>
                                             <FormControl>
                                                 <InputGroup>
                                                     <InputGroupInput

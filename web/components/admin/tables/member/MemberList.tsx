@@ -18,7 +18,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatTh } from "@/lib/format-date";
 import { Switch } from "@/components/ui/switch";
 import { useState } from "react";
-import { useMemberStatus } from "@/hooks/use-member";
+import { useDeleteMemberById, useMemberStatus } from "@/hooks/use-member";
+import { PenSquareIcon, Trash2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import MemberDialog from "../../member/dialog/create-updated/memberDialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 
 interface MemberListTableProps {
@@ -116,6 +120,12 @@ export default function MemberListTable({ data, refetch }: MemberListTableProps)
         {
             id: "action",
             header: t("action"),
+            cell: ({ row }) => (
+                <div className="flex gap-2">
+                    <EditAction id={row.original.id} />
+                    <DeleteAction id={row.original.id} />
+                </div>
+            ),
         },
     ];
 
@@ -150,4 +160,62 @@ function SwitchChange({ status, id }: { status: string; id: string }) {
     };
 
     return <Switch checked={checked} onCheckedChange={handleToggle} disabled={isLoading} />;
+}
+
+function EditAction({ id }: { id: string }) {
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const handleOpenChange = (open: boolean) => {
+        setOpenDialog(open);
+    };
+
+    return (
+        <>
+            <Button size="sm" className="cursor-pointer" onClick={() => handleOpenChange(true)}>
+                <PenSquareIcon />
+            </Button>
+
+            <MemberDialog
+                open={openDialog}
+                onOpenChange={handleOpenChange}
+                id={id}
+            />
+        </>
+    );
+}
+
+function DeleteAction({ id }: { id: string }) {
+    const t = useTranslations("admin.table.alert");
+    const { mutateAsync: deleted, isPending } = useDeleteMemberById();
+    const onDelete = async () => {
+        try {
+            await deleted(id);
+        } catch {
+            // handled by react-query onError
+        }
+    };
+
+    return (
+        <AlertDialog>
+            <AlertDialogTrigger asChild>
+                <Button size="sm" variant="destructive" className="cursor-pointer">
+                    <Trash2 />
+                </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+                <AlertDialogHeader>
+                    <AlertDialogTitle>{t('title')}</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        {t('description')}
+                    </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                    <AlertDialogCancel>{t('cancel')}</AlertDialogCancel>
+                    <AlertDialogAction onClick={onDelete} className="cursor-pointer sm:w-[150px]">
+                        {isPending ? t('deleting') : t('delete')}
+                    </AlertDialogAction>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog>
+    );
 }

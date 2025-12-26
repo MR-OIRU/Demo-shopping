@@ -27,9 +27,9 @@ export function useMeDetail() {
   const accessToken = session?.accessToken as string;
 
   return useQuery<MemberItem>({
-    queryKey: ["me", accessToken],
+    queryKey: ["profile", accessToken],
     queryFn: async () => {
-      const res = await apiClient.get<MemberItem>("/member/me", {
+      const res = await apiClient.get<MemberItem>("/member/profile", {
         token: accessToken,
       });
       return res;
@@ -39,21 +39,23 @@ export function useMeDetail() {
   });
 }
 
-export function useMemberDetail(id: string) {
-  const { data: session, status } = useSession();
+export function useMemberById(id?: string) {
+  const { data: session } = useSession();
   const accessToken = session?.accessToken as string;
 
   return useQuery<MemberItem>({
     queryKey: ["member", accessToken, id],
     queryFn: async () => {
-      const res = await apiClient.post<MemberItem>("/member/detail", {
-        token: accessToken,
-        body: { id },
-      });
+      const res = await apiClient.post<MemberItem>(
+        "/member/detail",
+        { id },
+        {
+          token: accessToken,
+        }
+      );
       return res;
     },
-    staleTime: 1000 * 60 * 5,
-    enabled: status === "authenticated" && !!accessToken && !!id,
+    enabled: !!id && !!accessToken,
   });
 }
 
@@ -61,6 +63,8 @@ function buildForData(data: MemberFormSchema) {
   const formData = new FormData();
 
   if (data.id) formData.append("id", data.id);
+  if (data.role) formData.append("role", data.role);
+  if (data.username) formData.append("username", data.username);
   if (data.email) formData.append("email", data.email);
   if (data.phone) formData.append("phone", data.phone);
   if (data.password) formData.append("password", data.password);
@@ -131,6 +135,32 @@ export function useMemberStatus(onSuccess?: () => void) {
     },
     onSuccess: () => {
       toast.success("อัพเดทข้อมูลสำเร็จ");
+      void onSuccess?.();
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง");
+    },
+  });
+}
+
+export function useDeleteMemberById(onSuccess?: () => void) {
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken as string;
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await apiClient.delete(
+        "/member/deleted",
+        { id },
+        {
+          token: accessToken,
+        }
+      );
+    },
+    onSuccess: () => {
+      toast.success("ลบข้อมูลสำเร็จ");
+      queryClient.invalidateQueries({ queryKey: ["members"] });
       void onSuccess?.();
     },
     onError: (error: Error) => {

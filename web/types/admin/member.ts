@@ -1,7 +1,7 @@
 export type MemberListItem = {
   id: string;
   role: string;
-  profile:string;
+  profile: string;
   username: string;
   email: string;
   phone: string;

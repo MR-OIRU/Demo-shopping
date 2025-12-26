@@ -104,15 +104,23 @@
     "loggingOut": "Logging out...",
     "settingProfile": "Setting Profile",
     "setting": {
+      "member": {
+        "username": "Username",
+        "email": "Email",
+        "phone": "Phone Number",
+        "password": "Password",
+        "placeholderChangePassword": "Set a new password (leave blank if you don't want to change)",
+        "placeholderPassword": "Please enter your password",
+        "confirmPassword": "Confirm Password",
+        "role": "Role",
+        "selectRole": "Select Role",
+        "headCreated": "Create Member",
+        "descriptionCreated": "Create a new member account by providing basic information such as username, email, phone number, and access role.",
+        "headUpdated": "Member Information",
+        "descriptionUpdated": "Edit your personal information such as email, phone number, profile picture, and set a new password from this page.",
+        "headProfile": "Your Profile"
+      },
       "loading": "Please wait, loading data",
-      "username": "Username",
-      "email": "Email",
-      "phone": "Phone Number",
-      "password": "Password",
-      "placeholderPassword": "Set a new password (leave blank if you don't want to change)",
-      "confirmPassword": "Confirm Password",
-      "profile": "Your Profile",
-      "description": "Edit your personal information such as email, phone number, profile picture, and set a new password from this page",
       "reset": "Reset",
       "save": "Save",
       "cancel": "Cancel"
@@ -130,6 +138,13 @@
       "created": "Created At",
       "updated": "Updated At",
       "action": "Action",
+      "alert": {
+        "title": "Confirm Deletion",
+        "description": "Are you sure you want to delete this notification? This action cannot be undone.",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "deleting": "Deleting..."
+      },
       "member": {
         "role": "Role",
         "image": "Image",

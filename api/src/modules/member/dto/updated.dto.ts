@@ -34,7 +34,7 @@ export class CreatedOrUpdatedMember {
   @IsOptional()
   id: string;
 
-  @IsEmail()
+  @IsString()
   @IsNotEmpty()
   username: string;
 
