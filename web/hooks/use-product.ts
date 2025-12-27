@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { ProductListItem } from "@/types";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";

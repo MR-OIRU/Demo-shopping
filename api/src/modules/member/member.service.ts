@@ -20,7 +20,11 @@ export class MemberService {
   ) {}
 
   async getMembers(): Promise<MembersItem[]> {
-    const response = await this.userRepository.find();
+    const response = await this.userRepository.find({
+      order:{
+        role: "ASC"
+      }
+    });
 
     if (!response) {
       return [];

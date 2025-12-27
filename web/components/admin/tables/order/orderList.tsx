@@ -31,6 +31,12 @@ export default function OrderListTable({ data, refetch }: OrderListTableProps) {
             cell: ({ row }) => <>{row.index + 1}</>,
         },
         {
+            accessorKey: "created",
+            header: tOrder("created"),
+            enableSorting: true,
+            cell: ({ getValue }) => formatTh(getValue<string>()),
+        },
+        {
             accessorKey: "orderId",
             header: tOrder("orderId"),
             enableSorting: true,
@@ -38,6 +44,11 @@ export default function OrderListTable({ data, refetch }: OrderListTableProps) {
         {
             accessorKey: "customer",
             header: tOrder("customer"),
+            enableSorting: true,
+        },
+        {
+            accessorKey: "address",
+            header: tOrder("address"),
             enableSorting: true,
         },
         {
@@ -51,14 +62,14 @@ export default function OrderListTable({ data, refetch }: OrderListTableProps) {
             enableSorting: true,
         },
         {
-            accessorKey: "created",
-            header: t("created"),
+            accessorKey: "paidAt",
+            header: tOrder("paidAt"),
             enableSorting: true,
             cell: ({ getValue }) => formatTh(getValue<string>()),
         },
         {
-            accessorKey: "updated",
-            header: t("updated"),
+            accessorKey: "shippedAt",
+            header: tOrder("shippedAt"),
             enableSorting: true,
             cell: ({ getValue }) => formatTh(getValue<string>()),
         },

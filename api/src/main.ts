@@ -1,6 +1,10 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ClassSerializerInterceptor, Logger, ValidationPipe } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { type NestExpressApplication } from '@nestjs/platform-express';
 import helmet from 'helmet';
@@ -52,18 +56,20 @@ async function bootstrap() {
       threshold: 1024,
     }),
   );
-
-  app.use(
-    rateLimit({
-      windowMs: 15 * 60 * 1000,
-      max: 100,
-      message: 'Too many requests from this IP, please try again later.',
-      standardHeaders: true,
-      legacyHeaders: false,
-      validate: { trustProxy: false },
-    }),
-  );
   
+  if (configService.get('NODE_ENV') !== 'development') {
+    app.use(
+      rateLimit({
+        windowMs: 15 * 60 * 1000,
+        max: 100,
+        message: 'Too many requests from this IP, please try again later.',
+        standardHeaders: true,
+        legacyHeaders: false,
+        validate: { trustProxy: false },
+      }),
+    );
+  }
+
   app.disable('x-powered-by');
 
   app.useGlobalPipes(

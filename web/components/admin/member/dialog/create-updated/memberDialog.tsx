@@ -57,12 +57,10 @@ export default function MemberDialog({ open, onOpenChange, id }: DialogProps) {
     })
 
     useEffect(() => {
-        if (open) {
-            void refetch().catch((err) => {
-                console.error("Refetch error:", err);
-            });
-        }
-    }, [open, refetch]);
+        if (!open) return;
+        if (!id) return;         
+        void refetch();
+    }, [open, id, refetch]);
 
     useEffect(() => {
         if (!open) return;
@@ -78,6 +76,7 @@ export default function MemberDialog({ open, onOpenChange, id }: DialogProps) {
 
     const onReset = () => {
         form.reset();
+        setImagePreview(null);
         form.clearErrors();
     }
 

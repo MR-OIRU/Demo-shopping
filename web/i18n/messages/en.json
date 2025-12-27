@@ -135,8 +135,8 @@
       "previous": "Previous",
       "next": "Next",
       "status": "Status",
-      "created": "Created At",
-      "updated": "Updated At",
+      "created": "Created Date",
+      "updated": "Updated Date",
       "action": "Action",
       "alert": {
         "title": "Confirm Deletion",
@@ -154,26 +154,46 @@
         "lastLogin": "Last Login"
       },
       "product": {
-        "name": "Product Name",
+        "type": "Product Type",
+        "nameTh": "Product Name (TH)",
+        "nameEn": "Product Name (EN)",
         "image": "Image",
         "price": "Price",
-        "stock": "Stock"
+        "stockReal": "In Stock",
+        "stockReserved": "Reserved Stock"
       },
       "order": {
         "orderId": "Order ID",
         "customer": "Customer",
+        "address": "Address",
         "total": "Total",
-        "status": "Order Status"
+        "status": "Order Status",
+        "created": "Order Date",
+        "paidAt": "Paid Date",
+        "shippedAt": "Shipped Date"
       }
     },
     "memberPage": {
       "breadcrumbs": "Member List"
     },
     "productPage": {
-      "breadcrumbs": "Product List"
+      "breadcrumbs": "Product List",
+      "status": {
+        "all": "All",
+        "active": "Active",
+        "inactive": "Inactive"
+      }
     },
     "orderPage": {
-      "breadcrumbs": "Order List"
+      "breadcrumbs": "Order List",
+      "status": {
+        "all": "All",
+        "pending_payment": "Pending",
+        "paid": "Paid",
+        "waiting_shipment": "Waiting",
+        "shipped": "Shipped",
+        "cancelled": "Cancelled"
+      }
     }
   }
 }

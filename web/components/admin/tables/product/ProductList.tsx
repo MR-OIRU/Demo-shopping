@@ -34,13 +34,23 @@ export default function ProductListTable({ data, refetch }: ProductListTableProp
             cell: ({ row }) => <>{row.index + 1}</>,
         },
         {
+            accessorKey: "type",
+            header: tProduct("type"),
+            enableSorting: true,
+        },
+        {
             accessorKey: "image",
             header: tProduct("image"),
             enableSorting: true,
         },
         {
-            accessorKey: "name",
-            header: tProduct("name"),
+            accessorKey: "nameTh",
+            header: tProduct("nameTh"),
+            enableSorting: true,
+        },
+        {
+            accessorKey: "nameEn",
+            header: tProduct("nameEn"),
             enableSorting: true,
         },
         {
@@ -49,8 +59,13 @@ export default function ProductListTable({ data, refetch }: ProductListTableProp
             enableSorting: true,
         },
         {
-            accessorKey: "stock",
-            header: tProduct("stock"),
+            accessorKey: "stockReal",
+            header: tProduct("stockReal"),
+            enableSorting: true,
+        },
+        {
+            accessorKey: "stockReserved",
+            header: tProduct("stockReserved"),
             enableSorting: true,
         },
         {

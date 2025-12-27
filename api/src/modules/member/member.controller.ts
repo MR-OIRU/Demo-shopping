@@ -15,7 +15,6 @@ import type { AuthJwtPayload } from 'src/common/interfaces';
 import { MemberItem, MembersItem } from './types/member';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateStatus, CreatedOrUpdatedMember, UpdateProfile } from './dto/updated.dto';
-import { memoryStorage } from 'multer';
 
 @UseGuards(JwtAuthGuard)
 @Controller('member')

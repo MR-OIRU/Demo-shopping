@@ -55,7 +55,7 @@ export function useMemberById(id?: string) {
       );
       return res;
     },
-    enabled: !!id && !!accessToken,
+    enabled: !!accessToken && !!id,
   });
 }
 

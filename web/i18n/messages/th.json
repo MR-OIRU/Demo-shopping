@@ -99,7 +99,7 @@
     "dashboard": "แดชบอร์ด",
     "member": "สมาชิก",
     "product": "สินค้า",
-    "order": "การสั่งซื้อ",
+    "order": "คำสั่งซื้อ",
     "logout": "ออกจากระบบ",
     "loggingOut": "กำลังออกจากระบบ...",
     "settingProfile": "ตั้งค่าโปรไฟล์",
@@ -136,8 +136,8 @@
       "next": "ถัดไป",
       "action": "จัดการ",
       "status": "สถานะ",
-      "created": "สร้างเมื่อ",
-      "updated": "อัปเดตเมื่อ",
+      "created": "วันที่สร้าง",
+      "updated": "วันที่อัปเดต",
       "alert": {
         "title": "ยืนยันการลบ",
         "description": "คุณแน่ใจหรือไม่ว่าต้องการลบการแจ้งเตือนนี้? การลบไม่สามารถย้อนกลับได้",
@@ -154,26 +154,46 @@
         "lastLogin": "เข้าสู่ระบบล่าสุด"
       },
       "product": {
-        "name": "ชื่อสินค้า",
+        "type": "ประเภทสินค้า",
+        "nameTh": "ชื่อสินค้า (TH)",
+        "nameEn": "ชื่อสินค้า (EN)",
         "image": "รูปภาพ",
         "price": "ราคา",
-        "stock": "สต็อก"
+        "stockReal": "สต็อกพร้อมขาย",
+        "stockReserved": "สต็อกที่ถูกจอง"
       },
       "order": {
         "orderId": "รหัสคำสั่งซื้อ",
         "customer": "ลูกค้า",
+        "address": "ที่อยู่",
         "total": "ยอดรวม",
-        "status": "สถานะคำสั่งซื้อ"
+        "status": "สถานะคำสั่งซื้อ",
+        "created": "วันที่สั่งซื้อ",
+        "paidAt": "วันที่จ่ายเงิน",
+        "shippedAt": "วันที่ส่งของ"
       }
     },
     "memberPage": {
       "breadcrumbs": "รายชื่อสมาชิก"
     },
     "productPage": {
-      "breadcrumbs": "รายการสินค้า"
+      "breadcrumbs": "รายการสินค้า",
+      "status": {
+        "all": "ทั้งหมด",
+        "active": "ใช้งาน",
+        "inactive": "ไม่ใช้งาน"
+      }
     },
     "orderPage": {
-      "breadcrumbs": "รายการสั่งซื้อ"
+      "breadcrumbs": "รายการคำสั่งซื้อ",
+      "status": {
+        "all": "ทั้งหมด",
+        "pending_payment": "รอชำระเงิน",
+        "paid": "จ่ายเงินแล้ว",
+        "waiting_shipment": "รอจัดส่ง",
+        "shipped": "ส่งของแล้ว",
+        "cancelled": "ยกเลิก"
+      }
     }
   }
 }

@@ -1,10 +1,17 @@
+export type ProductStatus = "active" | "inactive";
+
+export type ProductTabValue = "all" | ProductStatus;
+
 export type ProductListItem = {
   id: string;
-  name: string;
+  type: string;
   image: string;
+  nameTh: string;
+  nameEn: string;
   price: number;
-  stock: number;
+  stockReal: number;
+  stockReserved: number;
   created: string;
   updated: string;
-  status: string;
+  status: ProductStatus;
 };
