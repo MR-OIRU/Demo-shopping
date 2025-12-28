@@ -27,7 +27,7 @@ export class SystemUser {
   @Column({ unique: true })
   username: string;
 
-  @Column({ name: 'password_hash' })
+  @Column({ name: 'password_hash', select: false })
   @Exclude()
   passwordHash: string;
 
