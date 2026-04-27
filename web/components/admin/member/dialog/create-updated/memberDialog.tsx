@@ -40,7 +40,7 @@ export default function MemberDialog({ open, onOpenChange, id }: DialogProps) {
     const tMember = useTranslations('admin.setting.member');
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
-    const { data, refetch } = useMemberById(id);
+    const { data, refetch } = useMemberById(id, open);
 
     const form = useForm<MemberFormSchema>({
         resolver: zodResolver(MemberFormSchema),
@@ -58,7 +58,7 @@ export default function MemberDialog({ open, onOpenChange, id }: DialogProps) {
 
     useEffect(() => {
         if (!open) return;
-        if (!id) return;         
+        if (!id) return;
         void refetch();
     }, [open, id, refetch]);
 
@@ -322,7 +322,7 @@ export default function MemberDialog({ open, onOpenChange, id }: DialogProps) {
                             <DialogFooter className="!justify-between !flex-col sm:!flex-row">
                                 <Button type="button" className="cursor-pointer" variant={'secondary'} disabled={isPending} onClick={() => onReset()}>
                                     {isPending ? (
-                                        <Loader2 className="animeta-spin h-4 w-4" />
+                                        <Loader2 className="animate-spin h-4 w-4" />
                                     ) : (
                                         <RotateCcw className="h-4 w-4" />
                                     )}
@@ -338,7 +338,7 @@ export default function MemberDialog({ open, onOpenChange, id }: DialogProps) {
                                     <div className="flex-2">
                                         <Button type="submit" className="cursor-pointer w-full sm:w-[150px]" disabled={isPending}>
                                             {isPending ? (
-                                                <Loader2 className="animeta-spin h-4 w-4" />
+                                                <Loader2 className="animate-spin h-4 w-4" />
                                             ) : (
                                                 <Save className="h-4 w-4" />
                                             )}

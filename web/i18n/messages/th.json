@@ -120,6 +120,29 @@
         "descriptionUpdated": "แก้ไขข้อมูลส่วนตัวของคุณ เช่น อีเมล เบอร์โทรศัพท์ รูปโปรไฟล์ และตั้งรหัสผ่านใหม่ได้จากหน้านี้",
         "headProfile": "โปรไฟล์ของคุณ"
       },
+      "product": {
+        "informationTh": "ข้อมูลภาษาไทย",
+        "informationEn": "ข้อมูลภาษาอังกฤษ",
+        "type": "ประเภทสินค้า",
+        "selectType": "เลือกประเภทสินค้า",
+        "url": "ลิงก์สินค้า",
+        "name": "ชื่อสินค้า",
+        "heading": "หัวข้อ",
+        "altText": "Alt Text รูปภาพ",
+        "titleSummary": "สรุปชื่อเรื่อง",
+        "metaTitle": "Meta Title",
+        "metaKeyword": "Meta Keywords",
+        "metaDescription": "Meta Description",
+        "description": "รายละเอียด",
+        "price": "ราคา",
+        "unitPrice": "บาท",
+        "image": "รูปสินค้า",
+        "headCreated": "เพิ่มข้อมูลสินค้า",
+        "descriptionCreated": "กรอกข้อมูลสินค้าเพื่อเพิ่มสินค้าเข้าสู่ระบบ",
+        "headUpdated": "ข้อมูลสินค้า",
+        "descriptionUpdated": "แก้ไขรายละเอียดสินค้าได้จากหน้านี้"
+      },
+      "insertData": "เพิ่มข้อมูล",
       "loading": "กรุณารอสักครู่ กำลังโหลดข้อมูล",
       "reset": "คืนค่า",
       "save": "บันทึก",
@@ -178,6 +201,8 @@
     },
     "productPage": {
       "breadcrumbs": "รายการสินค้า",
+      "breadcrumbInsert": "เพิ่มสินค้า",
+      "breadcrumbUpdated": "อัพเดทสินค้า",
       "status": {
         "all": "ทั้งหมด",
         "active": "ใช้งาน",

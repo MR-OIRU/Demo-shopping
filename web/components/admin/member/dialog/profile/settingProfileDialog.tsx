@@ -295,7 +295,7 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
                             <DialogFooter className="!justify-between !flex-col sm:!flex-row">
                                 <Button type="button" className="cursor-pointer" variant={'secondary'} disabled={isUpdating} onClick={() => onReset()}>
                                     {isUpdating ? (
-                                        <Loader2 className="animeta-spin h-4 w-4" />
+                                        <Loader2 className="animate-spin h-4 w-4" />
                                     ) : (
                                         <RotateCcw className="h-4 w-4" />
                                     )}
@@ -311,7 +311,7 @@ export default function SettingProfileDialog({ open, onOpenChange }: DialogProps
                                     <div className="flex-2">
                                         <Button type="submit" className="cursor-pointer w-full sm:w-[150px]" disabled={isUpdating}>
                                             {isUpdating ? (
-                                                <Loader2 className="animeta-spin h-4 w-4" />
+                                                <Loader2 className="animate-spin h-4 w-4" />
                                             ) : (
                                                 <Save className="h-4 w-4" />
                                             )}

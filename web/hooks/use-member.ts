@@ -39,7 +39,7 @@ export function useMeDetail() {
   });
 }
 
-export function useMemberById(id?: string) {
+export function useMemberById(id?: string, enabled = true) {
   const { data: session } = useSession();
   const accessToken = session?.accessToken as string;
 
@@ -55,7 +55,7 @@ export function useMemberById(id?: string) {
       );
       return res;
     },
-    enabled: !!accessToken && !!id,
+    enabled: !!accessToken && !!id && enabled,
   });
 }
 
